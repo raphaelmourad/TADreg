@@ -29,6 +29,7 @@ DIM<-function(HTC1,HTC2,distMax=NULL,analysis="border",overlap=1){
   binidxs=sort(unique(c(which(abs(RegCoef1)>0),which(abs(RegCoef2)>0))))
  }
  binidxs=setdiff(binidxs,binidxs+overlap)
+ binidxsnames=names(bin.GR[binidxs])
 
  # Make list of HTC
  HTC_list=list(HTC1,HTC2)
@@ -60,8 +61,8 @@ DIM<-function(HTC1,HTC2,distMax=NULL,analysis="border",overlap=1){
  HiC_matRegDiff=cbind(HiC_matRegComp,Expe)
 
  # Compute regression
- form=as.formula(paste0("Count~",paste(c(paste0("bin",binidxs),"Expe",
-	paste0(paste0("bin",binidxs),":Expe")),collapse="+")))
+ form=as.formula(paste0("Count~",paste(c(binidxsnames,"Expe",
+	paste0(binidxsnames,":Expe")),collapse="+")))
  RegDiff=summary(lm(form,data=as.data.frame(as.matrix(HiC_matRegDiff))))
 
  # Extract differential TAD betas
@@ -69,8 +70,8 @@ DIM<-function(HTC1,HTC2,distMax=NULL,analysis="border",overlap=1){
  coefDiff=data.frame(coefDiff,padj=p.adjust(coefDiff[,4],method="bonferroni"))
  coef=matrix(0,length(bin.GR),5)
  coef[,4:5]=1
- bincoef=as.numeric(sapply(substring(rownames(coefDiff),4),function(x){strsplit(x,':')[[1]][1]}))
- coef[bincoef,]=as.matrix(coefDiff)
+ #bincoef=as.numeric(sapply(substring(rownames(coefDiff),4),function(x){strsplit(x,':')[[1]][1]}))
+ coef[binidxs,]=as.matrix(coefDiff)
  coef[,1:3]=round(coef[,1:3],3)
  colnames(coef)=c("beta.diff","SE.diff","t.diff","p.diff","padj.diff")
  values(bin.GR)=data.frame(coef,beta1=TADres1$beta,beta2=TADres2$beta)
