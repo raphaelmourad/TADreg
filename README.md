@@ -15,5 +15,14 @@ To run the scripts, you need several R packages. To install the packages:
 install.packages(c("Matrix","glmnet","data.table","ggplot2","circlize","mgcv","L0Learn","doMC"))
 BiocManager::install(c("BSgenome.Mmusculus.UCSC.mm10","rtracklayer","GenomicRanges","HiTC","hicrep"))
 
+# Usage
+
+In this package, there are three main folders:
+
+- The folder "data" contains: ??.
+- The folder "script" contains seven R scripts: ??.
+- The folder "results" contains three subfolders: ??.
+
+
 # Contact: 
 raphael.mourad@univ-tlse3.fr
