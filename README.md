@@ -19,8 +19,8 @@ BiocManager::install(c("BSgenome.Mmusculus.UCSC.mm10","rtracklayer","GenomicRang
 
 In this package, there are three main folders:
 
-- The folder "data" contains: ??.
-- The folder "script" contains seven R scripts: ??.
+- The folder "data" contains: Hi-C data matrices formatted as HiTC R objects (https://www.bioconductor.org/packages//2.10/bioc/html/HiTC.html).
+- The folder "script" contains one main R script "main_package.R" for contains examples for running the three functions SIM (TAD border identification), DIM (differential TAD border detection) and PIM (prediction of rearranged 3D genome). 
 - The folder "results" contains three subfolders: ??.
 
 
