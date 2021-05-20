@@ -23,6 +23,8 @@ devtools::install_github("morphos30/TADreg")
 
 In the folder Tutorial, you will find an R Markdown file main_package.html which will explain with examples how to use TADreg R package.  
 
+# Folders
+
 In this package, there are three main folders:
 
 - The folder "data" contains: Hi-C data matrices formatted as HiTC R objects (https://www.bioconductor.org/packages//2.10/bioc/html/HiTC.html).
