@@ -21,7 +21,8 @@ devtools::install_github("morphos30/TADreg")
 
 # Usage
 
-In the folder Tutorial, you will find an R Markdown file main_package.html which will explain with examples how to use TADreg R package.  
+In the folder Tutorial, you will find an R Markdown file main_package.html which will explain with examples how to use TADreg R package:
+https://github.com/morphos30/TADreg/blob/main/tutorial/main_package.html
 
 # Folders
 
