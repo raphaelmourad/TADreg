@@ -14,7 +14,7 @@ To run the scripts, you need several R packages. To install the packages:
 install.packages(c("devtools","Matrix","glmnet","data.table","ggplot2","circlize","mgcv","L0Learn","doMC"))
 BiocManager::install(c("BSgenome.Mmusculus.UCSC.mm10","rtracklayer","GenomicRanges","HiTC","hicrep"))
 
-For R > 4.0.0, the installation of "hicrep" might not work with BiocManager for some reasons. Instead, you could install "hicrep" directly from the github repository:
+For R > 4.0.0, the installation of "hicrep" might not work with BiocManager for some reasons. Instead, you could install "hicrep" directly from the github repository:  
 library(devtools)  
 remotes::install_github("aidenlab/straw/R")  
 devtools::install_github(“TaoYang-dev/hicrep”)
