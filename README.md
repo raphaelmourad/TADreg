@@ -14,6 +14,11 @@ To run the scripts, you need several R packages. To install the packages:
 install.packages(c("Matrix","glmnet","data.table","ggplot2","circlize","mgcv","L0Learn","doMC"))
 BiocManager::install(c("BSgenome.Mmusculus.UCSC.mm10","rtracklayer","GenomicRanges","HiTC","hicrep"))
 
+# Installation
+
+library(devtools)
+devtools::install_github("morphos30/TADreg")
+
 # Usage
 
 In this package, there are three main folders:
