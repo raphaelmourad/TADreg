@@ -397,6 +397,8 @@ suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(TADreg))</code></pre>
 <pre><code>## Warning: replacing previous import 'GenomicRanges::shift' by 'data.table::shift'
 ## when loading 'TADreg'</code></pre>
+<pre><code>## Warning: replacing previous import 'data.table::shift' by 'GenomicRanges::shift'
+## when loading 'TADreg'</code></pre>
 </div>
 <div id="for-parallel-computing" class="section level2">
 <h2>For parallel computing</h2>
@@ -429,22 +431,22 @@ Chr=&quot;chr18&quot;</code></pre>
 </div>
 <div id="loop-over-embryonic-stem-es-and-cortical-neuron-cn-cell-lines" class="section level2">
 <h2>Loop over embryonic stem (ES) and cortical neuron (CN) cell lines</h2>
-<pre class="r"><code>data(HiC_ES_mouse_chr18_50_60Mb_HTCexp) # load HTC_ES
-data(HiC_CN_mouse_chr18_50_60Mb_HTCexp) # load HTC_CN
+<pre class="r"><code>data(HiC_ES_mouse_HTCexp) # load HTC_ES
+data(HiC_CN_mouse_HTCexp) # load HTC_CN
 print(HTC_ES)</code></pre>
 <pre><code>## HTCexp object
-## Focus on genomic region [chr18:50000001-60000000]
-## Matrix of Interaction data: [400-400]</code></pre>
+## Focus on genomic region [chr18:50000001-70000000]
+## Matrix of Interaction data: [800-800]</code></pre>
 <pre class="r"><code>print(HTC_CN)</code></pre>
 <pre><code>## HTCexp object
-## Focus on genomic region [chr18:50000001-60000000]
-## Matrix of Interaction data: [400-400]</code></pre>
+## Focus on genomic region [chr18:50000001-70000000]
+## Matrix of Interaction data: [800-800]</code></pre>
 </div>
 <div id="bins" class="section level2">
 <h2>Bins</h2>
 <pre class="r"><code>bin.GR=x_intervals(HTC_ES)
 print(bin.GR)</code></pre>
-<pre><code>## GRanges object with 400 ranges and 0 metadata columns:
+<pre><code>## GRanges object with 800 ranges and 0 metadata columns:
 ##           seqnames            ranges strand
 ##              &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt;
 ##   bin2001    chr18 50000001-50025000      *
@@ -453,11 +455,11 @@ print(bin.GR)</code></pre>
 ##   bin2004    chr18 50075001-50100000      *
 ##   bin2005    chr18 50100001-50125000      *
 ##       ...      ...               ...    ...
-##   bin2396    chr18 59875001-59900000      *
-##   bin2397    chr18 59900001-59925000      *
-##   bin2398    chr18 59925001-59950000      *
-##   bin2399    chr18 59950001-59975000      *
-##   bin2400    chr18 59975001-60000000      *
+##   bin2796    chr18 69875001-69900000      *
+##   bin2797    chr18 69900001-69925000      *
+##   bin2798    chr18 69925001-69950000      *
+##   bin2799    chr18 69950001-69975000      *
+##   bin2800    chr18 69975001-70000000      *
 ##   -------
 ##   seqinfo: 1 sequence from an unspecified genome; no seqlengths</code></pre>
 <div id="sparse-insulation-model-sim" class="section level3">
@@ -467,24 +469,22 @@ print(bin.GR)</code></pre>
 </div>
 <div id="run-sparse-insulation-model-sim-to-identify-tad-borders-and-facilitators-from-cn-mouse-cells." class="section level2">
 <h2>Run Sparse Insulation Model (SIM) to identify TAD borders and facilitators from CN mouse cells.</h2>
-<pre class="r"><code>TADres=SIM(HTC_CN,distMax=distMax,penalty=&quot;L0&quot;)</code></pre>
-<pre><code>## Warning in estimate.theta(theta, family, G$y, linkinv(eta), scale = scale1, :
-## step failure in theta estimation</code></pre>
-<pre class="r"><code>print(TADres)</code></pre>
-<pre><code>## GRanges object with 400 ranges and 1 metadata column:
+<pre class="r"><code>TADres=SIM(HTC_CN,distMax=distMax,penalty=&quot;L0&quot;)
+print(TADres)</code></pre>
+<pre><code>## GRanges object with 800 ranges and 1 metadata column:
 ##           seqnames            ranges strand |      beta
 ##              &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;
 ##   bin2001    chr18 50000001-50025000      * |         0
 ##   bin2002    chr18 50025001-50050000      * |         0
 ##   bin2003    chr18 50050001-50075000      * |         0
 ##   bin2004    chr18 50075001-50100000      * |         0
-##   bin2005    chr18 50100001-50125000      * |    -1.116
+##   bin2005    chr18 50100001-50125000      * |    -1.009
 ##       ...      ...               ...    ... .       ...
-##   bin2396    chr18 59875001-59900000      * |         0
-##   bin2397    chr18 59900001-59925000      * |         0
-##   bin2398    chr18 59925001-59950000      * |         0
-##   bin2399    chr18 59950001-59975000      * |         0
-##   bin2400    chr18 59975001-60000000      * |         0
+##   bin2796    chr18 69875001-69900000      * |    -1.164
+##   bin2797    chr18 69900001-69925000      * |         0
+##   bin2798    chr18 69925001-69950000      * |         0
+##   bin2799    chr18 69950001-69975000      * |         0
+##   bin2800    chr18 69975001-70000000      * |         0
 ##   -------
 ##   seqinfo: 1 sequence from an unspecified genome; no seqlengths</code></pre>
 </div>
@@ -517,42 +517,37 @@ mapC(HTC_CNsub,log=T)</code></pre>
 </div>
 <div id="run-differential-insulation-model-dim-to-identify-differential-borders-between-cn-and-es-mouse-cells" class="section level2">
 <h2>Run Differential Insulation Model (DIM) to identify differential borders between CN and ES mouse cells</h2>
-<pre class="r"><code>TADdiffres=DIM(HTC_ES,HTC_CN,distMax)</code></pre>
-<pre><code>## Warning in estimate.theta(theta, family, G$y, linkinv(eta), scale = scale1, :
-## step failure in theta estimation
-
-## Warning in estimate.theta(theta, family, G$y, linkinv(eta), scale = scale1, :
-## step failure in theta estimation</code></pre>
-<pre class="r"><code>coefDiff=TADdiffres$beta.diff
+<pre class="r"><code>TADdiffres=DIM(HTC_ES,HTC_CN,distMax)
+coefDiff=TADdiffres$beta.diff
 coefCond=cbind(TADdiffres$beta1,TADdiffres$beta2)
 print(TADdiffres)</code></pre>
-<pre><code>## GRanges object with 400 ranges and 7 metadata columns:
+<pre><code>## GRanges object with 800 ranges and 7 metadata columns:
 ##           seqnames            ranges strand | beta.diff   SE.diff    t.diff
 ##              &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;
 ##   bin2001    chr18 50000001-50025000      * |         0         0         0
 ##   bin2002    chr18 50025001-50050000      * |         0         0         0
 ##   bin2003    chr18 50050001-50075000      * |         0         0         0
 ##   bin2004    chr18 50075001-50100000      * |         0         0         0
-##   bin2005    chr18 50100001-50125000      * |     0.176     0.203     0.866
+##   bin2005    chr18 50100001-50125000      * |     0.149     0.221     0.676
 ##       ...      ...               ...    ... .       ...       ...       ...
-##   bin2396    chr18 59875001-59900000      * |         0         0         0
-##   bin2397    chr18 59900001-59925000      * |         0         0         0
-##   bin2398    chr18 59925001-59950000      * |         0         0         0
-##   bin2399    chr18 59950001-59975000      * |         0         0         0
-##   bin2400    chr18 59975001-60000000      * |         0         0         0
+##   bin2796    chr18 69875001-69900000      * |         0         0         0
+##   bin2797    chr18 69900001-69925000      * |         0         0         0
+##   bin2798    chr18 69925001-69950000      * |         0         0         0
+##   bin2799    chr18 69950001-69975000      * |         0         0         0
+##   bin2800    chr18 69975001-70000000      * |         0         0         0
 ##                      p.diff padj.diff     beta1     beta2
 ##                   &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;
 ##   bin2001                 1         1         0         0
 ##   bin2002                 1         1         0         0
 ##   bin2003                 1         1         0         0
 ##   bin2004                 1         1         0         0
-##   bin2005 0.386492651529183         1         0    -1.107
+##   bin2005 0.498770346823078         1         0    -1.009
 ##       ...               ...       ...       ...       ...
-##   bin2396                 1         1         0         0
-##   bin2397                 1         1         0         0
-##   bin2398                 1         1         0         0
-##   bin2399                 1         1         0         0
-##   bin2400                 1         1         0         0
+##   bin2796                 1         1         0    -1.164
+##   bin2797                 1         1         0         0
+##   bin2798                 1         1         0         0
+##   bin2799                 1         1         0         0
+##   bin2800                 1         1         0         0
 ##   -------
 ##   seqinfo: 1 sequence from an unspecified genome; no seqlengths</code></pre>
 </div>
@@ -605,8 +600,8 @@ Chr=&quot;chr1&quot;</code></pre>
 </div>
 <div id="loop-over-hi-c-files-wt-wild-type-delb-deletion-b-delbs-deletion-bs-and-invf-inversion-f" class="section level2">
 <h2>Loop over Hi-C files: WT (wild-type), DelB (Deletion B), DelBs (Deletion Bs) and InvF (Inversion F)</h2>
-<pre class="r"><code>data(GSM2425366_CHiC_Epha4_WT_E115_MAPQ30_KRnorm_10kb_HTCexp) # HTC_WT
-data(GSM2425367_CHiC_Epha4_DelB_E115_MAPQ30_KRnorm_10kb_HTCexp) # HTC_SVX</code></pre>
+<pre class="r"><code>data(CHiC_Epha4_WT_E115_HTCexp) # HTC_WT
+  data(CHiC_Epha4_DelB_E115_HTCexp) # HTC_SVX </code></pre>
 </div>
 <div id="bins-1" class="section level2">
 <h2>Bins</h2>
@@ -667,7 +662,7 @@ pdf(file_PredObs)
 mapC(HTC_SVX,HTC_PredSVX,log=T)</code></pre>
 <pre><code>## minrange= 0.074  - maxrange= 7.467</code></pre>
 <pre><code>## Warning in eval(call, parent.frame()): production de NaN</code></pre>
-<pre><code>## minrange= 0.1  - maxrange= 7.119</code></pre>
+<pre><code>## minrange= 0.1  - maxrange= 7.132</code></pre>
 <pre class="r"><code>dev.off()</code></pre>
 <pre><code>## png 
 ##   2</code></pre>

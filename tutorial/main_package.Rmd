@@ -67,8 +67,8 @@ cells=c("ES","CN")
 
 ## Loop over embryonic stem (ES) and cortical neuron (CN) cell lines
 ```{r load_data}
-data(HiC_ES_mouse_chr18_50_60Mb_HTCexp) # load HTC_ES
-data(HiC_CN_mouse_chr18_50_60Mb_HTCexp) # load HTC_CN
+data(HiC_ES_mouse_HTCexp) # load HTC_ES
+data(HiC_CN_mouse_HTCexp) # load HTC_CN
 print(HTC_ES)
 print(HTC_CN)
 ```
@@ -169,8 +169,8 @@ Chr="chr1"
 
 ## Loop over Hi-C files: WT (wild-type), DelB (Deletion B), DelBs (Deletion Bs) and InvF (Inversion F)
 ```{r load_data_PIM}
-data(GSM2425366_CHiC_Epha4_WT_E115_MAPQ30_KRnorm_10kb_HTCexp) # HTC_WT
-data(GSM2425367_CHiC_Epha4_DelB_E115_MAPQ30_KRnorm_10kb_HTCexp) # HTC_SVX
+data(CHiC_Epha4_WT_E115_HTCexp) # HTC_WT
+  data(CHiC_Epha4_DelB_E115_HTCexp) # HTC_SVX 
 ```
 
 ## Bins
