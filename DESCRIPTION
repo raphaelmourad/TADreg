@@ -1,0 +1,13 @@
+Package: TADreg
+Type: Package
+Title: Versatile regression framework for TAD analysis and prediction.
+Version: 1.0
+Date: 2021-05-19
+Author: Raphael Mourad
+Maintainer: Raphael Mourad <raphael.mourad@univ-tlse3.fr>
+Description: Here, we propose a versatile regression framework which not only identifies 
+	TADs in a fast and accurare manner, but also detects differential TAD borders across
+	conditions for which few methods exist, and predicts 3D genome reorganizarion after 
+	chromosomal rearrangement. Moreover, the framework is biologically meaningful, 
+	has an intuitive interpretation and is easy to visualize.
+License: MIT License

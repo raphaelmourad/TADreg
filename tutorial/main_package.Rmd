@@ -1,0 +1,237 @@
+---
+title: "Tutorial to use TADreg R package"
+author: "Raphael Mourad, Assistant Professor, Université Paul Sabatier"
+date: "20/05/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This is the main script to run the different functions:  
+- SIM (Sparse Insulation Model) for identifying TAD borders / facilitators  
+- DIM (Differential Insulation Model) for detecting differential TAD borders / facilitators  
+- PIM (Prediction Insulation Model) for predicting Hi-C data with chromosomal rearrangements
+
+## Load librairies
+```{r load_lib}
+suppressPackageStartupMessages(library(BSgenome.Mmusculus.UCSC.mm10))
+suppressPackageStartupMessages(library(rtracklayer))
+suppressPackageStartupMessages(library(GenomicRanges))
+suppressPackageStartupMessages(library(HiTC))
+suppressPackageStartupMessages(library(hicrep))
+
+suppressPackageStartupMessages(library(Matrix))
+suppressPackageStartupMessages(library(glmnet))
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(circlize))
+suppressPackageStartupMessages(library(mgcv))
+suppressPackageStartupMessages(library(L0Learn))
+suppressPackageStartupMessages(library(doMC))
+
+suppressPackageStartupMessages(library(ggplot2))
+
+suppressPackageStartupMessages(library(TADreg))
+```
+
+## For parallel computing
+```{r parallel}
+registerDoMC(cores=4)
+```
+
+## Create directories for results
+```{r dir}
+dir.create("results")
+dir.create("results/SIM/")
+dir.create("results/DIM/")
+dir.create("results/PIM/")
+```
+
+### LOAD HIC DATA FOR SIM AND DIM RUNNING EXAMPLES 
+
+## Parameters
+```{r param}
+res=25e3
+reskb=paste0(res/1e3,"kb")
+distMax=res*10
+Chr="chr18"
+```
+
+## Cells
+```{r cells}
+cells=c("ES","CN")
+```
+
+## Loop over embryonic stem (ES) and cortical neuron (CN) cell lines
+```{r load_data}
+data(HiC_ES_mouse_chr18_50_60Mb_HTCexp) # load HTC_ES
+data(HiC_CN_mouse_chr18_50_60Mb_HTCexp) # load HTC_CN
+print(HTC_ES)
+print(HTC_CN)
+```
+
+## Bins
+```{r bins}
+bin.GR=x_intervals(HTC_ES)
+print(bin.GR)
+```
+
+
+### SPARSE INSULATION MODEL (SIM)  
+
+Here we try to replicate results presented in the Figure 3 from the article. 
+NB: results are slightly different from those presented in the Figure 3 from the article, because here we could not use the whole chromosome for computations since the file was too big to be deposited in an R package (5Mb limit). 
+
+## Run Sparse Insulation Model (SIM) to identify TAD borders and facilitators from CN mouse cells. 
+```{r SIM}
+TADres=SIM(HTC_CN,distMax=distMax,penalty="L0")
+print(TADres)
+```
+
+## Plot results from SIM
+```{r plot_res_SIM}
+x1=100
+x2=300
+posPlot=start(TADres)
+coefPlot=TADres$beta
+file_plotTAD=paste0("results/SIM/plot_TADborder_",Chr,"_",round(start(bin.GR[x1])/1e3),"kb_", end(bin.GR[x2])/1e3,"kb_",reskb,"_dmax",distMax/1e3,"kb.pdf")
+pdf(file_plotTAD,12,4)
+plot((posPlot/1e6)[x1:x2],coefPlot[x1:x2],type="l",xlab="Position (Mb)",ylab="SIM beta")
+dev.off()
+```
+
+## Plot Hi-C heatmaps 
+```{r plot_hic_map_SIM}
+HTC_CNsub=extractRegion(HTC_CN,c(1,2),chr=Chr,from=start(bin.GR[x1]),to=end(bin.GR[x2]))
+file_heatmapComp=paste("results/SIM/plot_HiC_CN_",Chr,"_",round(start(bin.GR[x1])/1e3),"kb_",end(bin.GR[x2])/1e3,"kb_",reskb,".pdf")
+pdf(file_heatmapComp)
+mapC(HTC_CNsub,log=T)
+dev.off()
+```
+
+
+### DIFFERENTIAL INSULATION MODEL (DIM)
+
+## Run Differential Insulation Model (DIM) to identify differential borders between CN and ES mouse cells 
+```{r DIM}
+TADdiffres=DIM(HTC_ES,HTC_CN,distMax)
+coefDiff=TADdiffres$beta.diff
+coefCond=cbind(TADdiffres$beta1,TADdiffres$beta2)
+print(TADdiffres)
+```
+
+## Plot results at chr18:54888045-54990180 
+```{r plot_res_DIM}
+x1=100
+x2=300
+posPlot=(x1:x2)*res
+coefPlot=coefCond[x1:x2,]
+coefPlotDiff=coefDiff[x1:x2]
+pvalPlotDiff=TADdiffres$padj.diff[x1:x2]
+file_TADborderDiff=paste0("results/DIM/plot_TADborderDiff_",Chr,"_",round(start(bin.GR[x1])/1e3),"kb_",end(bin.GR[x2])/1e3,"kb_",reskb,"_d",distMax/1e3,"kb.pdf")
+pdf(file_TADborderDiff,6,7)
+par(mfrow=c(4,1))
+par(mar=c(5,5,1,1))
+minmax=c(min(coefPlot,coefPlotDiff),max(coefPlot,coefPlotDiff))
+plot(posPlot/1e6,coefPlot[,1],ylim=minmax,type="l",xlab="Position (Mb)",
+	ylab="Beta",col="red",main=cells[1])
+plot(posPlot/1e6,coefPlot[,2],ylim=minmax,type="l",xlab="Position (Mb)",
+	ylab="Beta",col="blue",main=cells[2])
+plot(posPlot/1e6,coefPlotDiff,ylim=minmax,type="l",xlab="Position (Mb)",
+	ylab="Beta",main="Differential borders")
+plot(posPlot/1e6,-log10(pvalPlotDiff),type="l",xlab="Position (Mb)",
+	ylab="-log10 adjusted p-value",main="Differential borders")
+dev.off()
+```
+
+## Plot Hi-C heatmaps 
+```{r plot_hic_map_DIM}
+HTC_ESsub=extractRegion(HTC_ES,c(1,2),chr=Chr,from=start(bin.GR[x1]),to=end(bin.GR[x2]))
+HTC_CNsub=extractRegion(HTC_CN,c(1,2),chr=Chr,from=start(bin.GR[x1]),to=end(bin.GR[x2]))
+file_heatmapComp=paste("results/DIM/plot_HiC_",Chr,"_",round(start(bin.GR[x1])/1e3),"kb_",end(bin.GR[x2])/1e3,"kb_",reskb,".pdf")
+pdf(file_heatmapComp)
+mapC(HTC_ESsub,HTC_CNsub,log=T)
+dev.off()
+```
+
+
+### PREDICTION INSULATION MODEL (PIM) 
+
+## Parameters
+```{r param_PIM}
+res=10e3
+reskb=paste0(res/1e3,"kb")
+Chr="chr1"
+```
+
+## Loop over Hi-C files: WT (wild-type), DelB (Deletion B), DelBs (Deletion Bs) and InvF (Inversion F)
+```{r load_data_PIM}
+data(GSM2425366_CHiC_Epha4_WT_E115_MAPQ30_KRnorm_10kb_HTCexp) # HTC_WT
+data(GSM2425367_CHiC_Epha4_DelB_E115_MAPQ30_KRnorm_10kb_HTCexp) # HTC_SVX
+```
+
+## Bins
+```{r bin_PIM}
+bin.GR=x_intervals(HTC_WT)
+```
+
+## Chromosomal rearrangement positions
+```{r chr_rea}
+SV.GR=GRanges("chr1",IRanges(c(76388978,76388978,74832836),c(78060839,77858974,75898707)))
+typeSV=c("deletion","deletion","inversion")
+SVX.GR=SV.GR[1]
+typeSVX=typeSV[1]
+```
+
+## Parameters of PIM
+```{r params_PIM}
+distMax=res*ncol(intdata(HTC_WT))
+model="glmlasso"
+noise=1
+output="asWT"
+```
+
+## Run Prediction Insulation Model (PIM) to predict Hi-C data after chromosomal rearrangement
+```{r PIM}
+HTC_PredSVX=PIM(HTC=HTC_WT,structVar.GR=SVX.GR,typeVar=typeSVX,
+	output=output,model=model,distMax=distMax,parallel=T,noise=noise)
+print(HTC_PredSVX)
+```
+
+## Correlations between predictions and observations
+```{r cor_PIM}
+count_SVX=as.vector(as.matrix(intdata(HTC_SVX)))
+count_PredSVX=as.vector(as.matrix(intdata(HTC_PredSVX)))
+dataCount=data.frame(SVX=count_SVX,PredSVX=count_PredSVX)
+dataCount=dataCount[dataCount[,1]>0 & dataCount[,2]>0,]
+corlogPredObs=round(cor(log(dataCount[,1]),log(dataCount[,2]),use="pairwise.complete.obs"),3)
+corsPredObs=round(cor(count_SVX,count_PredSVX,method="spearman"),3)
+SCCPredObs=round(compSCC(HTC_SVX,HTC_PredSVX),3)
+```
+
+## Plot heatmaps
+```{r plot_heatmap_PIM}
+Str=start(SVX.GR)
+End=end(SVX.GR)
+file_PredObs=paste0("results/PIM/heatmap_CHIC_PredObs_",Chr,"_",round(Str/1e3),"kb_",round(End/1e3),"kb.pdf")
+pdf(file_PredObs)
+mapC(HTC_SVX,HTC_PredSVX,log=T)
+dev.off()
+```
+
+## Plot counts
+```{r plot_counts_PIM}
+file_plot_obspred_count=paste0("results/PIM/scatterplot_CHIC_PredObs_",Chr,"_",round(Str/1e3),"kb_",round(End/1e3),"kb.pdf")
+pdf(file_plot_obspred_count,5,5)
+d <- ggplot(dataCount, aes(SVX, PredSVX)) +
+	geom_hex(bins=100) + scale_x_log10() + scale_y_log10() + coord_cartesian(xlim=c(1,500), ylim = c(1,500)) + 
+	labs(title=paste0("Rlog=",corlogPredObs," Rs=",corsPredObs," SCC=",SCCPredObs))
+print(d)
+dev.off()
+```
+
+
+

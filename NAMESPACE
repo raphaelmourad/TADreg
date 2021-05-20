@@ -1,0 +1,32 @@
+# Import
+import("BSgenome.Mmusculus.UCSC.mm10")
+import("rtracklayer")
+import("GenomicRanges")
+import("glmnet")
+import("HiTC")
+import("hicrep")
+import("Matrix")
+import("glmnet")
+import("data.table")
+import("mgcv")
+import("L0Learn")
+import("doMC")
+
+importFrom("GenomeInfoDb", "seqlengths", "seqlevels", "seqlevels<-")
+importFrom("rtracklayer","import")
+importFrom("GenomicRanges", "GRanges", "width","findOverlaps")
+importFrom("glmnet", "cv.glmnet")
+importFrom("HiTC", "x_intervals", "intdata")
+importFrom("hicrep", "htrain", "prep", "get.scc")
+importFrom("Matrix", "as.matrix", "Matrix","sparseMatrix")
+importFrom("mgcv", "bam")
+importFrom("stats", "as.formula", "lm", "glm", "prcomp")
+importFrom("utils", "read.table")
+importFrom("IRanges", "IRanges", "IRangesList", "breakInChunks","Views","RleViewsList","viewMeans")
+importFrom("S4Vectors","queryHits")
+importFrom("MASS", "glm.nb")
+importFrom("L0Learn", "L0Learn.cvfit")
+
+
+# Export
+exportPattern("^[[:alpha:]]+")
