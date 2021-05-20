@@ -16,6 +16,7 @@ BiocManager::install(c("BSgenome.Mmusculus.UCSC.mm10","rtracklayer","GenomicRang
 
 For R > 4.0.0, the installation of "hicrep" might not work with BiocManager for some reasons. Instead, you could install "hicrep" directly from the github repository:
 library(devtools)  
+remotes::install_github("aidenlab/straw/R")
 devtools::install_github(“TaoYang-dev/hicrep”)
 
 # Installation
