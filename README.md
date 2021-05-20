@@ -16,8 +16,8 @@ BiocManager::install(c("BSgenome.Mmusculus.UCSC.mm10","rtracklayer","GenomicRang
 
 # Installation
 
-library(devtools)
-devtools::install_github("morphos30/TADreg")
+library(devtools)  
+devtools::install_github("morphos30/TADreg")  
 
 # Usage
 
