@@ -1,5 +1,4 @@
-# TADreg
-TADreg : A versatile regression framework for TAD identification, differential analysis and prediction
+# TADreg: A versatile regression framework for TAD identification, differential analysis and prediction
 
 # Overview
 We propose a versatile regression framework which not only identifies TADs in a fast and accurate manner, but also detects
