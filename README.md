@@ -1,5 +1,7 @@
 # TADreg: A versatile regression framework for TAD identification, differential analysis and prediction
 
+![alt text](TADreg.png)
+
 # Overview
 We propose a versatile regression framework which not only identifies TADs in a fast and accurate manner, but also detects
 differential TAD borders across conditions for which few methods exist, and predicts 3D genome reorganization after chromosomal rearrangement. Moreover, the framework is biologically meaningful, has
