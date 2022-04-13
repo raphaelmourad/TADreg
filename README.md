@@ -37,6 +37,10 @@ In this package, there are three main folders:
 - The folder "script" contains one main R script "main_package.R" for contains examples for running the three functions SIM (TAD border identification), DIM (differential TAD border detection) and PIM (prediction of rearranged 3D genome). 
 - The folder "results" contains three subfolders: SIM (TAD border identification), DIM (differential TAD border detection) and PIM (prediction of rearranged 3D genome). In the folders, there are already plots illustrating the results obtained from the three functions.
 
+# Reference
+Raphaël Mourad, TADreg: a versatile regression framework for TAD identification, differential analysis and rearranged 3D genome prediction. 
+BMC Bioinformatics. 2022 Mar 2;23(1):82. doi: 10.1186/s12859-022-04614-0. 
+https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-022-04614-0
 
 # Contact: 
 raphael.mourad@univ-tlse3.fr
