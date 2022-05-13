@@ -37,6 +37,26 @@ In this package, there are three main folders:
 - The folder "script" contains one main R script "main_package.R" for contains examples for running the three functions SIM (TAD border identification), DIM (differential TAD border detection) and PIM (prediction of rearranged 3D genome). 
 - The folder "results" contains three subfolders: SIM (TAD border identification), DIM (differential TAD border detection) and PIM (prediction of rearranged 3D genome). In the folders, there are already plots illustrating the results obtained from the three functions.
 
+# Importing data from standard Hi-C processing pipelines
+The function ProcData(htc,distMax=2.5e6) from TADreg processes data from HTCexp object from the HiTC R package format :).
+
+# From Juicer
+You will find a function to import Hi-C data from Juicer dump format.
+HTCfromJuicerDump(file_juicer_dump, resolution, chr, assembly, sparse=T)
+The function will return a HTCexp object from HiTC R package.
+https://bioconductor.org/packages/release/bioc/manuals/HiTC/man/HiTC.pdf
+
+# From HiC-pro
+HiC-Pro is compatible with HiTC R package (same author).
+https://bioconductor.org/packages/release/bioc/manuals/HiTC/man/HiTC.pdf
+
+See explanations from:
+https://github.com/nservant/HiC-Pro/blob/master/doc/COMPATIBILITY.md
+
+For instance:
+hic<-importC("HI-C-hrpL-KB_29000_iced.matrix","HI-C-hrpL-KB_29000_abs.bed")
+
+
 # Reference
 Raphaël Mourad, TADreg: a versatile regression framework for TAD identification, differential analysis and rearranged 3D genome prediction. 
 BMC Bioinformatics. 2022 Mar 2;23(1):82. doi: 10.1186/s12859-022-04614-0. 
