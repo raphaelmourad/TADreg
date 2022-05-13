@@ -57,6 +57,7 @@ https://github.com/nservant/HiC-Pro/blob/master/doc/COMPATIBILITY.md
 
 For instance:
 hic<-importC("HI-C-hrpL-KB_29000_iced.matrix","HI-C-hrpL-KB_29000_abs.bed")
+names(hic@xgi)=paste0("bin",1:length(hic@xgi)) # this line will fix some bugs for DIM function
 
 # From any other tools 
 You can convert most Hi-C formats to Juicer format with hicConvertFormat from HiC explorer.
