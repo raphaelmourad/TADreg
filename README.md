@@ -59,7 +59,7 @@ For instance:
 hic<-importC("HI-C-hrpL-KB_29000_iced.matrix","HI-C-hrpL-KB_29000_abs.bed")
 
 # From any other tools 
-You can convert most Hi-C format to Juicer format with hicConvertFormat from HiC explorer.
+You can convert most Hi-C formats to Juicer format with hicConvertFormat from HiC explorer.
 
 https://hicexplorer.readthedocs.io/en/latest/content/tools/hicConvertFormat.html
 
