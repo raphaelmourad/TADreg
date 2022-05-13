@@ -58,7 +58,9 @@ https://github.com/nservant/HiC-Pro/blob/master/doc/COMPATIBILITY.md
 For instance:
 hic<-importC("HI-C-hrpL-KB_29000_iced.matrix","HI-C-hrpL-KB_29000_abs.bed")
 
-# From any other tools, you can convert most Hi-C format to Juicer format with hicConvertFormat from HiC explorer
+# From any other tools 
+You can convert most Hi-C format to Juicer format with hicConvertFormat from HiC explorer.
+
 https://hicexplorer.readthedocs.io/en/latest/content/tools/hicConvertFormat.html
 
 # Reference
