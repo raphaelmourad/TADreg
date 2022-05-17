@@ -49,10 +49,10 @@ HTCfromJuicerDump(file_juicer_dump, resolution, chr, assembly, sparse=T)
 The function will return a HTCexp object from HiTC R package.
 
 # From HiC-pro
-HiC-Pro is compatible with HiTC R package (same author).
+HiC-Pro is compatible with HiTC R package (same author).  
 https://bioconductor.org/packages/release/bioc/manuals/HiTC/man/HiTC.pdf
 
-See explanations from:
+See explanations from:  
 https://github.com/nservant/HiC-Pro/blob/master/doc/COMPATIBILITY.md
 
 For instance:  
