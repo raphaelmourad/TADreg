@@ -26,8 +26,10 @@ devtools::install_github(“TaoYang-dev/hicrep”)
 
 # Installation
 
+```
 library(devtools)  
 devtools::install_github("morphos30/TADreg")  
+```
 
 # Usage
 
